@@ -1,47 +1,45 @@
-# Pi-3in1
+# Raspberry Pi NAS
 
-A Raspberry Pi 5 home server combining three self-hosted services:
-
-1. NAS
-2. Private Cloud
-3. Pi-hole
-
-## Project Goals
-
-The goal is to build a low-cost, self-hosted server using a Raspberry Pi 5 and NVMe storage to see if a Raspberry Pi is worth it in 2026.
-
-## Architecture
-
-Raspberry Pi 5
-│
-├── NAS
-│   └── Samba
-│
-├── Private Cloud
-│   └── Nextcloud
-│
-└── Network-wide Ad Blocking
-    └── Pi-hole
+The NAS component of **Pi-3in1** is a self-hosted network storage server built using a Raspberry Pi 5 and NVMe storage. Files can be accessed over the local network through Samba.
 
 ## Hardware
 
 - Raspberry Pi 5
-- Geekworm X1001 NVMe HAT
-- 256GB M.2 2280 NVMe SSD
+- Geekworm X1001 PCIe to M.2 NVMe HAT
+- SUNEAST 256GB M.2 2280 PCIe 3.0 NVMe SSD
 - 27W 5V/5A USB-C power supply
-- Cooling system
-- 3D-printed enclosure
+- Cooling fan
 - Ethernet
+- 3D-printed enclosure
 
-## Progress
+## Software
 
-- [x] Raspberry Pi OS
-- [x] NVMe detection
-- [x] NVMe partitioning
-- [x] EXT4 filesystem
-- [x] Persistent NVMe mounting
-- [x] Samba NAS
-- [ ] Private cloud
+- Raspberry Pi OS
+- Linux
+- EXT4
+- Samba
+- SSH
+
+## Storage
+
+The NVMe SSD is configured with an EXT4 filesystem and mounted at:
+
+`/mnt/nas`
+
+Persistent mounting is configured through `/etc/fstab`.
+
+## Network Storage
+
+Samba is configured to provide authenticated network file sharing. The NAS has been successfully tested from Windows with file read/write functionality.
+
+## Status
+
+**Complete and operational.**
+
+This is the first completed component of the **Pi-3in1** project.
+
+### Project Roadmap
+
+- [x] NAS
+- [ ] Private Cloud
 - [ ] Pi-hole
-- [ ] Final enclosure
-- [ ] Remote access
