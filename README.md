@@ -8,7 +8,7 @@ A Raspberry Pi 5 home server combining three self-hosted services:
 
 ## Project Goals
 
-The goal is to build a low-cost, self-hosted server using a Raspberry Pi 5 and NVMe storage.
+The goal is to build a low-cost, self-hosted server using a Raspberry Pi 5 and NVMe storage to see if a Raspberry Pi is worth it in 2026.
 
 ## Architecture
 
