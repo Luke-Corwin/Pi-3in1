@@ -40,7 +40,7 @@ Raspberry Pi 5
 - [x] NVMe partitioning
 - [x] EXT4 filesystem
 - [x] Persistent NVMe mounting
-- [ ] Samba NAS
+- [x] Samba NAS
 - [ ] Private cloud
 - [ ] Pi-hole
 - [ ] Final enclosure
