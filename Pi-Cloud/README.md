@@ -62,3 +62,7 @@ PiCloud is one of three systems included in my **Pi-3in1** project:
 
 * [Setup Guide](setup.md)
 * [Commands Reference](commands.md)
+
+## Setup
+
+![3D Printed Case](images/3DCase.jpg)
