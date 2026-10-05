@@ -1,64 +1,132 @@
-# PiCloud
+# Pi-Cloud
 
-PiCloud is the private cloud storage portion of my **Pi-3in1** Raspberry Pi project. It uses a Raspberry Pi 5 with NVMe SSD storage and Nextcloud to provide personal file storage that can be accessed from a web browser or the Nextcloud mobile app.
+Pi-Cloud is the self-hosted private cloud portion of my Raspberry Pi 3-in-1 Home Server.
 
-## Hardware
+The goal was to host my own cloud storage using Nextcloud rather than relying entirely on a third-party cloud provider.
 
-* Raspberry Pi 5
-* NVMe HAT
-* NVMe SSD
-* Ethernet connection
-* Raspberry Pi power supply
-* Custom 3D-printed case
+<!-- IMAGE: Add screenshot of Nextcloud dashboard -->
 
-The case was designed in **Blender** and 3D printed specifically to fit the Raspberry Pi 5, NVMe HAT, and SSD together in one compact enclosure.
+## Architecture
+
+```text
+                 Client
+                    |
+                Nextcloud
+                    |
+                  Apache
+                    |
+          +---------+---------+
+          |                   |
+       Files               MariaDB
+          |                   |
+     NVMe Storage          Metadata
+```
 
 ## Software
 
-* Raspberry Pi OS
-* Nextcloud
-* Apache
-* MariaDB
-* PHP
-* Tailscale *(optional for remote access)*
+The cloud server uses:
 
-## Storage
+- Nextcloud
+- Apache
+- MariaDB
+- PHP
+- Tailscale
+- Raspberry Pi OS
 
-The NVMe SSD is mounted at:
+## Nextcloud
+
+Nextcloud provides the user interface and file-management system.
+
+The installation is stored under:
 
 ```bash
-/mnt/nas
+/mnt/nas/nextcloud
 ```
 
-Nextcloud stores its data on the SSD rather than the Raspberry Pi's microSD card.
+This keeps the cloud storage on the NVMe SSD.
 
-## Accessing PiCloud
+Apache serves the Nextcloud web application to clients on the network.
 
-From a device on the same network, PiCloud can be accessed through:
+Its status can be checked using:
+
+```bash
+sudo systemctl status apache2
+```
+
+## MariaDB
+
+Nextcloud requires more than a location to store files.
+
+MariaDB provides the database used to keep track of information including:
+
+- Users
+- File metadata
+- Folder structure
+- Permissions
+- Sharing settings
+- Application settings
+
+The database and the actual files therefore serve different purposes.
 
 ```text
-http://PI-IP/nextcloud
+Nextcloud
+   |
+   +---- Actual files ----> NVMe storage
+   |
+   +---- File information -> MariaDB
 ```
 
-For example:
+MariaDB can be checked using:
 
-```text
-http://192.168.5.26/nextcloud
+```bash
+sudo systemctl status mariadb
 ```
 
-The official Nextcloud app can also be used on a phone by entering the PiCloud server address.
+## Remote Access
 
-## Project Goal
+Tailscale was installed to provide secure remote connectivity to the Raspberry Pi.
 
-The goal of PiCloud is to create a low-cost private cloud that gives me control over my own storage instead of relying entirely on third-party cloud storage services.
+The connection can be checked using:
 
-PiCloud is one of three systems included in my **Pi-3in1** project:
+```bash
+tailscale status
+```
 
-* **Pi-NAS** — Local network storage
-* **PiCloud** — Private cloud storage with Nextcloud
-* **PiHole** — Network-wide ad blocking
+This gives the Raspberry Pi a separate Tailscale address in addition to its local network address.
 
-## More Documentation
+## Testing
 
-* [Setup Guide](setup.md)
-* [Commands Reference](commands.md)
+Nextcloud was tested through its web interface.
+
+I successfully:
+
+- Logged into Nextcloud
+- Created a folder
+- Uploaded a file
+- Opened the file
+- Downloaded the file
+- Renamed the file
+- Deleted the file
+
+<!-- IMAGE: Add screenshot showing files inside Nextcloud -->
+
+This verified that the Nextcloud, Apache, MariaDB, and storage components were functioning together.
+
+## Result
+
+The Raspberry Pi successfully functions as a self-hosted private cloud server while simultaneously operating the Samba NAS and Pi-hole DNS service.
+
+## Skills Demonstrated
+
+- Linux server administration
+- Nextcloud
+- Apache
+- MariaDB
+- SQL
+- Web server configuration
+- Database configuration
+- File permissions
+- NVMe storage
+- Tailscale
+- Remote networking
+- Service troubleshooting

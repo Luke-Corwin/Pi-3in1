@@ -1,45 +1,91 @@
-# Raspberry Pi NAS
+# Pi-NAS
 
-The NAS component of **Pi-3in1** is a self-hosted network storage server built using a Raspberry Pi 5 and NVMe storage. Files can be accessed over the local network through Samba.
+Pi-NAS is the Network Attached Storage portion of my Raspberry Pi 3-in-1 Home Server.
+
+The goal was to use an NVMe SSD connected to a Raspberry Pi 5 as network-accessible storage for computers on my local network.
 
 ## Hardware
 
 - Raspberry Pi 5
-- Geekworm X1001 PCIe to M.2 NVMe HAT
-- SUNEAST 256GB M.2 2280 PCIe 3.0 NVMe SSD
-- 27W 5V/5A USB-C power supply
-- Cooling fan
-- Ethernet
-- 3D-printed enclosure
-
-## Software
-
-- Raspberry Pi OS
-- Linux
-- EXT4
-- Samba
-- SSH
+- Geekworm X1001 NVMe adapter
+- SUNEAST 256GB NVMe SSD
+- Raspberry Pi 27W power supply
+- Active cooling
 
 ## Storage
 
-The NVMe SSD is configured with an EXT4 filesystem and mounted at:
+The NVMe SSD was formatted and mounted at:
 
-`/mnt/nas`
+```bash
+/mnt/nas
+```
 
-Persistent mounting is configured through `/etc/fstab`.
+The drive can be verified using:
 
-## Network Storage
+```bash
+lsblk -f
+```
 
-Samba is configured to provide authenticated network file sharing. The NAS has been successfully tested from Windows with file read/write functionality.
+and:
 
-## Status
+```bash
+df -h /mnt/nas
+```
 
-**Complete and operational.**
+This provides persistent storage for the server without relying on the Raspberry Pi's microSD card for file storage.
 
-This is the first completed component of the **Pi-3in1** project.
+## Samba
 
-### Project Roadmap
+Samba was installed to allow Windows computers to access the Raspberry Pi storage using SMB.
 
-- [x] NAS
-- [ ] Private Cloud
-- [ ] Pi-hole
+The Samba service can be checked using:
+
+```bash
+sudo systemctl status smbd
+```
+
+Samba accounts can be viewed using:
+
+```bash
+sudo pdbedit -L
+```
+
+The NAS can then be accessed from Windows using:
+
+```text
+\\PI-IP-ADDRESS
+```
+
+## Testing
+
+The NAS was tested from a Windows computer.
+
+I successfully:
+
+- Connected to the Samba share
+- Created a folder
+- Created a file
+- Opened the file
+- Modified the file
+- Renamed the file
+- Deleted the file
+- Deleted the folder
+
+This verified both read and write access between the Windows client and Raspberry Pi.
+
+## Result
+
+The Raspberry Pi successfully functions as a local Network Attached Storage server using NVMe storage and Samba.
+
+This service continues running alongside Nextcloud and Pi-hole as part of the complete Pi-3in1 system.
+
+## Skills Demonstrated
+
+- Linux file systems
+- NVMe storage
+- Samba/SMB
+- Network file sharing
+- Linux permissions
+- Windows/Linux interoperability
+- Linux service management
+- Network troubleshooting
